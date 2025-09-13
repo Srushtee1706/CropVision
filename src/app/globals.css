@@ -1,0 +1,434 @@
+:root {
+      --dark-green: #0d2d24;
+      --card-green-1: #1d3a2f;
+      --card-green-2: #205242;
+      --card-green-3: #2e4a35;
+      --lime-green: #bfff00;
+      --white: #fff;
+      --gray: #d8d8d8;
+      --light-gray: #cfd8dc;
+      --black: #000;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: var(--dark-green);
+      color: var(--white);
+      padding-top: 60px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* --- Navbar --- */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      width: calc(100% - 80px);
+      z-index: 1000;
+      height: 20px;
+    }
+
+    .navbar .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .navbar nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+      color: var(--lime-green);
+    }
+
+    /* --- Hero Section --- */
+    .hero-section {
+      display: flex;
+      position: relative;
+      background-image: url("/background.jpg");
+      background-size: cover;
+      background-position: center;
+      height: 672px;
+    }
+
+    .hero-left {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 20px;
+      box-sizing: border-box;
+      height: 672px;
+    }
+
+    .hero-right {
+      flex: 1;
+      height: 672px;
+    }
+
+    .content-wrapper {
+      max-width: 80%;
+      text-align: left;
+      padding-left: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-size: 1.2em;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      color: var(--lime-green);
+    }
+
+    .title {
+      font-size: 4em;
+      margin: 0;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    .description {
+      font-size: 1em;
+      line-height: 1.5;
+      margin-top: 20px;
+      max-width: 400px;
+    }
+
+    .learn-more-btn {
+      padding: 15px 30px;
+      background-color: transparent;
+      border: 2px solid white;
+      color: white;
+      cursor: pointer;
+      margin-top: 30px;
+      text-transform: uppercase;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .learn-more-btn:hover {
+      background-color: white;
+      color: #000;
+    }
+
+    /* --- Features Section --- */
+    .features-container {
+      display: flex;
+      min-height: 100vh;
+      padding: 50px 20px;
+      background-color: var(--dark-green);
+    }
+
+    .features-left {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .features-left h1 {
+      font-size: clamp(2.5rem, 6vw, 2.8rem);
+      font-weight: 300;
+      line-height: 1.4;
+    }
+
+    .features-left h1 strong {
+      display: block;
+      font-weight: 600;
+      color: var(--lime-green);
+    }
+
+    .features-right {
+      flex: 2;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    @keyframes fadeInSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .feature-column {
+      flex: 1 1 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px 20px 40px;
+      text-align: center;
+      border-radius: 40px;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+      min-height: 400px;
+      transition: transform 0.3s ease-in-out;
+      opacity: 0;
+    }
+
+    .feature-column.animate-visible {
+      animation: fadeInSlideUp 0.8s ease-out forwards;
+    }
+
+    .feature-column:nth-child(1) {
+      background: var(--card-green-1);
+    }
+    .feature-column:nth-child(2) {
+      background: var(--card-green-2);
+      margin-top: 120px;
+      min-height: 500px;
+    }
+    .feature-column:nth-child(3) {
+      background: var(--card-green-3);
+    }
+
+    .feature-column:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .circle-img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 30px auto;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .circle-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .feature-column h2 {
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+      color: var(--white);
+      margin-top: 20px;
+    }
+
+    .feature-column p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 240px;
+      margin: 10px auto;
+      color: var(--light-gray);
+    }
+
+    .feature-column .feature-button {
+      display: inline-block;
+      background-color: var(--lime-green);
+      color: var(--dark-green);
+      padding: 10px 25px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .feature-column .feature-button:hover {
+      background-color: var(--white);
+      color: var(--dark-green);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* --- Odisha Farmers Section --- */
+    #odisha-farmers {
+      background-color: #1d3a2f;
+      padding: 80px 20px;
+    }
+
+    .odisha-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .odisha-img {
+      flex: 1;
+      width: 500px;
+      height: 344px;
+      text-align: center;
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 1s ease;
+    }
+
+    .odisha-img.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .odisha-img img {
+      width: 390px;
+      
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      margin-top: -100px;
+    }
+
+    .odisha-img img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .odisha-text {
+      flex: 1;
+      min-width: 300px;
+      color: #fff;
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 1s ease;
+    }
+
+    .odisha-text.visible {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0.3s;
+    }
+
+    .odisha-text h2 {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+      color: var(--lime-green);
+    }
+
+    .odisha-text p {
+      line-height: 1.8;
+      font-size: 1.1rem;
+      color: var(--light-gray);
+      text-align: justify;
+    }
+
+    /* --- Snake Cursor --- */
+    #snake-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .snake-dot {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #bfff00;
+      box-shadow: 0 0 12px #bfff00, 0 0 20px #bfff00;
+    }
+
+    /* --- Footer --- */
+    .footer-container {
+      background-color: var(--dark-green);
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      margin-bottom: 20px;
+    }
+    .footer-logo img {
+      max-width: 100px;
+      height: auto;
+    }
+
+    .social-links {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+      padding: 0;
+    }
+
+    .social-links a {
+      color: var(--white);
+      font-size: 1.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--lime-green);
+    }
+
+    .footer-text {
+      font-size: 0.9rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* --- Mobile --- */
+    @media (max-width: 992px) {
+      .features-container {
+        flex-direction: column;
+      }
+      .features-right {
+        flex-direction: column;
+      }
+      .feature-column {
+        margin-top: 60px !important;
+        width: 80%;
+      }
+      .features-left {
+        margin-bottom: 30px;
+      }
+
+      .odisha-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .odisha-text p {
+        text-align: center;
+      }
+    }
