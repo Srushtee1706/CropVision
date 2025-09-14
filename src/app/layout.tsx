@@ -1,4 +1,5 @@
 import "./globals.css";
+import { UserProvider } from "./context/UserContext";
 
 export const metadata = {
   title: "Farmus | Smart Farming Solutions",
@@ -12,7 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {/* Make user available across all pages */}
+        <UserProvider>{children}</UserProvider>
+      </body>
     </html>
   );
 }
