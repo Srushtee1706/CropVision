@@ -87,7 +87,7 @@ export default function Home() {
             <li><a href="#">HOME</a></li>
             <li><a href="#">ABOUT</a></li>
             <li> <Link href="/crop-prediction">SERVICES</Link></li>
-            <li><a href="#">PROGRAMS</a></li>
+            <li><Link href="/Login-Form">LOGIN</Link></li>
             <li><a href="#">FAQ</a></li>
           </ul>
         </nav>
@@ -187,4 +187,5 @@ export default function Home() {
     </>
   );
 }
+
 
