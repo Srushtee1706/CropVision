@@ -1,5 +1,7 @@
 import "./globals.css";
 import { UserProvider } from "./context/UserContext";
+import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
   title: "Farmus | Smart Farming Solutions",
@@ -15,7 +17,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {/* Make user available across all pages */}
-        <UserProvider>{children}</UserProvider>
+        <UserProvider>
+          <Navbar />
+          {children}
+          <Toaster richColors />
+        </UserProvider>
       </body>
     </html>
   );
