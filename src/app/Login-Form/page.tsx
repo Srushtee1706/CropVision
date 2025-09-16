@@ -123,7 +123,7 @@ export default function AuthPage() {
               <div className="signup-link">
                 <p>
                   {isLogin
-                    ? "Don’t have an account?"
+                    ? "Don't have an account?"
                     : "Already have an account?"}{" "}
                   <button
                     className="toggle-btn"
