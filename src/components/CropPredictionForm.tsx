@@ -2,8 +2,48 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link"; 
+import axios from "axios"
 import styles from "./CropPredictionForm.module.css";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "./ui/calendar";
+import { toast } from "sonner";
+
+const formSchema = z.object({
+  district: z.enum(["Angul", "Balasore", "Bolangir"], {
+    error: "District is required",
+  }),
+  crop: z.enum(["Paddy", "Wheat", "Maize", "Pulses", "Oilseeds"], {
+    error: "Crop is required",
+  }),
+  sow_date: z.date({ error: "Invalid date format" }),
+  season: z.enum(["Kharif", "Rabi", "Summer"], {
+    error: "Season is required"
+  }),
+});
 
 export default function CropPredictionForm() {
   const [formData, setFormData] = useState({
@@ -22,6 +62,10 @@ export default function CropPredictionForm() {
 
   const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
@@ -55,7 +99,9 @@ export default function CropPredictionForm() {
       dots.forEach((dot, index) => {
         dot.x += (x - dot.x) * 0.3;
         dot.y += (y - dot.y) * 0.3;
-        dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px) scale(${1 - index * 0.05})`;
+        dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px) scale(${
+          1 - index * 0.05
+        })`;
         dot.el.style.opacity = `${1 - index * 0.05}`;
         x = dot.x - delay;
         y = dot.y - delay;
@@ -66,13 +112,15 @@ export default function CropPredictionForm() {
     animateSnake();
   }, [router]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    // e.preventDefault();
     if (!username) {
       alert("Please login first!");
       router.push("/Login-Form");
@@ -86,27 +134,36 @@ export default function CropPredictionForm() {
       pestAlert: "No major pests detected",
     };
 
-    await new Promise((r) => setTimeout(r, 1000));
+    const formatedDate = format(data.sow_date,"yyyy-MM-dd");
+
+    axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/predict`,{
+      district: data.district,
+      crop: data.crop,
+      season: data.season,
+      sowing_date: formatedDate
+    }).then((resp) => {
+      console.log(resp.data);
+    }).catch((err) => {
+      if(err.response) {
+        // console.log(err.response.data.detail);
+        toast.error(err.response.data.detail, {
+          position: "bottom-center"
+        });
+      }
+      else {
+        toast.error(err.message);
+      }
+    });
     setResults(sampleData);
+
+    // await new Promise((r) => setTimeout(r, 1000));
+    // const newData = {...data, sow_date: formatedDate}
   };
 
   if (!username) return null;
 
   return (
     <div className={styles.pageContainer}>
-  <header className={styles.navbar}>
-    <div className={styles.logo}>Crop Vision</div>
-    <nav>
-      <ul className={styles.navList}>
-        <li><a href="/">HOME</a></li>
-        <li><a href="#">ABOUT</a></li>
-        <li><Link href="/crop-prediction">SERVICES</Link></li>
-        <li><Link href="/Login-Form">LOGIN</Link></li>
-        <li><a href="#">FAQ</a></li>
-      </ul>
-    </nav>
-  </header>
-
       <div id="snake-container" className={styles.snakeContainer}></div>
 
       <div className={styles.formContainer}>
@@ -114,75 +171,145 @@ export default function CropPredictionForm() {
           👋 Welcome, {username}! Predict your crop yield.
         </h2>
 
-        <form onSubmit={handleSubmit} className={styles.formGrid}>
-          <div className={styles.field}>
-            <label className={styles.label}>District</label>
-            <select
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className={styles.formGrid}
+          >
+            <FormField
+              control={form.control}
               name="district"
-              value={formData.district}
-              onChange={handleChange}
-              className={styles.inputField}
-              required
-            >
-              <option value="">Select District</option>
-              <option value="Angul">Angul</option>
-              <option value="Balangir">Balangir</option>
-              <option value="Balasore">Balasore</option>
-            </select>
-          </div>
-
-          <div className={styles.field}>
-            <label className={styles.label}>Crop</label>
-            <select
-              name="cropType"
-              value={formData.cropType}
-              onChange={handleChange}
-              className={styles.inputField}
-              required
-            >
-              <option value="">Select Crop</option>
-              <option value="paddy">Paddy</option>
-              <option value="wheat">Wheat</option>
-              <option value="maize">Maize</option>
-              <option value="pulses">Pulses</option>
-              <option value="oilseeds">Oilseeds</option>
-            </select>
-          </div>
-
-          <div className={styles.field}>
-            <label className={styles.label}>Sowing Date</label>
-            <input
-              type="date"
-              name="sowingDate"
-              value={formData.sowingDate}
-              onChange={handleChange}
-              className={`${styles.inputField} ${styles.sowingDateField}`}
-              required
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xl">District</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full py-6 rounded-3xl ring-green-300">
+                        <SelectValue placeholder="Select a district" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Districts</SelectLabel>
+                        <SelectItem value="Angul">Angul</SelectItem>
+                        <SelectItem value="Bolangir">Bolangir</SelectItem>
+                        <SelectItem value="Balasore">Balasore</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-
-          <div className={styles.field}>
-            <label className={styles.label}>Season</label>
-            <select
+            <FormField
+              control={form.control}
+              name="crop"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xl">Crop</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full py-6 rounded-3xl ring-green-300">
+                        <SelectValue placeholder="Select a crop" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Districts</SelectLabel>
+                        <SelectItem value="Wheat">Wheat</SelectItem>
+                        <SelectItem value="Paddy">Paddy</SelectItem>
+                        <SelectItem value="Maize">Maize</SelectItem>
+                        <SelectItem value="Pulses">Pulses</SelectItem>
+                        <SelectItem value="Oilseeds">Oilseeds</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="season"
-              value={formData.season}
-              onChange={handleChange}
-              className={styles.inputField}
-              required
-            >
-              <option value="">Select Season</option>
-              <option value="kharif">Kharif</option>
-              <option value="rabi">Rabi</option>
-              <option value="summer">Summer</option>
-            </select>
-          </div>
-
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xl">Season</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full py-6 rounded-3xl ring-green-300">
+                        <SelectValue placeholder="Select a district" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Districts</SelectLabel>
+                        <SelectItem value="Kharif">Kharif</SelectItem>
+                        <SelectItem value="Rabi">Rabi</SelectItem>
+                        <SelectItem value="Summer">Summer</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sow_date"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-xl">Sowing Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl className="w-full">
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal bg-transparent py-6 rounded-3xl",
+                            !field.value && "text-muted"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date("1900-01-01")
+                        }
+                        captionLayout="dropdown"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           <div className={styles.actionRow}>
             <button type="submit" className={styles.submitButton}>
               🚀 Get Prediction
             </button>
           </div>
-        </form>
+          </form>
+        </Form>
 
         {results && (
           <div className={styles.resultsContainer}>
