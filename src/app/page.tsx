@@ -1,6 +1,6 @@
 "use client";
-import { useEffect } from "react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Home() {
   useEffect(() => {
@@ -65,7 +65,9 @@ export default function Home() {
         dot.x += (x - dot.x) * 0.3;
         dot.y += (y - dot.y) * 0.3;
 
-        dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px) scale(${1 - index * 0.05})`;
+        dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px) scale(${
+          1 - index * 0.05
+        })`;
         dot.el.style.opacity = `${1 - index * 0.05}`;
 
         x = dot.x - delay;
@@ -80,30 +82,19 @@ export default function Home() {
 
   return (
     <>
-      <header className="navbar">
-        <div className="logo">Crop Vision</div>
-        <nav>
-          <ul>
-            <li><a href="#">HOME</a></li>
-            <li><a href="#">ABOUT</a></li>
-            <li> <Link href="/crop-prediction">SERVICES</Link></li>
-            <li><Link href="/Login-Form">LOGIN</Link></li>
-            <li><a href="#">FAQ</a></li>
-          </ul>
-        </nav>
-      </header>
-
       <div id="snake-container"></div>
-
       <main className="hero-section">
         <div className="hero-left">
           <div className="content-wrapper">
-            <p className="subtitle">AI-Powered Crop Yield Prediction for Odisha</p>
+            <p className="subtitle">
+              AI-Powered Crop Yield Prediction for Odisha
+            </p>
             <h1 className="title">CROP VISION</h1>
             <p className="description">
-              “An AI-powered platform for Odisha’s farmers that predicts crop yields
-              using weather, soil, and historical data. It provides regional-language
-              insights to optimize farming practices and boost productivity by 10% or more.”
+              “An AI-powered platform for Odisha&apos;s farmers that predicts crop
+              yields using weather, soil, and historical data. It provides
+              regional-language insights to optimize farming practices and boost
+              productivity by 10% or more.”
             </p>
             <button className="learn-more-btn">LEARN MORE</button>
           </div>
@@ -114,7 +105,8 @@ export default function Home() {
       <section className="features-container">
         <div className="features-left">
           <h1>
-            OUR <br /><strong>FEATURES</strong>
+            OUR <br />
+            <strong>FEATURES</strong>
           </h1>
         </div>
         <div className="features-right">
@@ -124,10 +116,13 @@ export default function Home() {
             </div>
             <h2>CROP YIELD PREDICTION</h2>
             <p>
-              A scalable web & mobile solution that helps small-scale farmers boost productivity by 10%
-              using AI-driven insights, with regional language support for accessibility.
+              A scalable web & mobile solution that helps small-scale farmers
+              boost productivity by 10% using AI-driven insights, with regional
+              language support for accessibility.
             </p>
-            <a href="farm.html" className="feature-button">Check it</a>
+            <Link href="/crop-prediction" className="feature-button">
+              Check it
+            </Link>
           </div>
 
           <div className="feature-column">
@@ -136,10 +131,12 @@ export default function Home() {
             </div>
             <h2>LOAN REQUIRY</h2>
             <p>
-              Easily apply for agricultural loans and track their status.
-              Get guidance on the right loan type and repayment options.
+              Easily apply for agricultural loans and track their status. Get
+              guidance on the right loan type and repayment options.
             </p>
-            <a href="#" className="feature-button">Check it</a>
+            <a href="#" className="feature-button">
+              Check it
+            </a>
           </div>
 
           <div className="feature-column">
@@ -148,10 +145,12 @@ export default function Home() {
             </div>
             <h2>GOVERNMENT SCHEMES</h2>
             <p>
-              Stay informed about the latest government schemes and subsidies for
-              farmers, all in one place.
+              Stay informed about the latest government schemes and subsidies
+              for farmers, all in one place.
             </p>
-            <a href="#" className="feature-button">Check it</a>
+            <a href="#" className="feature-button">
+              Check it
+            </a>
           </div>
         </div>
       </section>
@@ -164,7 +163,21 @@ export default function Home() {
           <div className="odisha-text">
             <h2>Odisha Farmers</h2>
             <p>
-              Odisha’s farmers form the backbone of the state’s economy, with nearly 70% of the population engaged in agriculture. They cultivate a wide range of crops, including rice, pulses, oilseeds, and vegetables, contributing significantly to both local consumption and national food supply. The state’s diverse agro-climatic conditions allow for multiple cropping seasons, enabling farmers to maximize yield throughout the year. Despite challenges such as unpredictable rainfall, pests, and market fluctuations, Odisha’s farmers demonstrate resilience and innovation, often adopting modern farming techniques and sustainable practices. Government initiatives and agricultural schemes further support them with access to irrigation, quality seeds, and credit facilities. Beyond economic contributions, these farmers preserve traditional knowledge, maintain soil fertility, and uphold the cultural heritage of Odisha’s rural communities.
+              Odisha&apos;s farmers form the backbone of the state&apos;s economy, with
+              nearly 70% of the population engaged in agriculture. They
+              cultivate a wide range of crops, including rice, pulses, oilseeds,
+              and vegetables, contributing significantly to both local
+              consumption and national food supply. The state&apos;s diverse
+              agro-climatic conditions allow for multiple cropping seasons,
+              enabling farmers to maximize yield throughout the year. Despite
+              challenges such as unpredictable rainfall, pests, and market
+              fluctuations, Odisha&apos;s farmers demonstrate resilience and
+              innovation, often adopting modern farming techniques and
+              sustainable practices. Government initiatives and agricultural
+              schemes further support them with access to irrigation, quality
+              seeds, and credit facilities. Beyond economic contributions, these
+              farmers preserve traditional knowledge, maintain soil fertility,
+              and uphold the cultural heritage of Odisha&apos;s rural communities.
             </p>
           </div>
         </div>
@@ -172,20 +185,36 @@ export default function Home() {
 
       <footer>
         <div className="footer-container">
-          <div className="footer-logo">
-            <img src="/image_5c9213.jg" alt="Farmus Logo" />
-          </div>
+          {/* <div className="footer-logo">
+            <img src="/image_5c9213.jpg" alt="Farmus Logo" />
+          </div> */}
           <ul className="social-links">
-            <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
-            <li><a href="#"><i className="fab fa-twitter"></i></a></li>
-            <li><a href="#"><i className="fab fa-instagram"></i></a></li>
-            <li><a href="#"><i className="fab fa-linkedin-in"></i></a></li>
+            <li>
+              <a href="#">
+                <i className="fab fa-facebook-f"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i className="fab fa-twitter"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i className="fab fa-instagram"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i className="fab fa-linkedin-in"></i>
+              </a>
+            </li>
           </ul>
-          <p className="footer-text">&copy; 2025 Farmus. All rights reserved.</p>
+          <p className="footer-text">
+            &copy; 2025 CropVision. All rights reserved.
+          </p>
         </div>
       </footer>
     </>
   );
 }
-
-

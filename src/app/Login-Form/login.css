@@ -20,11 +20,11 @@ body {
   font-family: "Segoe UI", Arial, sans-serif;
   background-color: var(--dark-green);
   color: var(--white);
-  padding-top: 60px;
+  /* padding-top: 60px; */
 }
 
 /* --- Navbar --- */
-.navbar {
+/* .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -59,7 +59,7 @@ body {
 
 .navbar nav a:hover {
   color: var(--lime-green);
-}
+} */
 
 /* --- Snake Cursor --- */
 #snake-container {
