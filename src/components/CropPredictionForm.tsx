@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios"
 import styles from "./CropPredictionForm.module.css";
 import {
   Select,
@@ -30,13 +29,14 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
-import { toast } from "sonner";
+import { districts } from "@/constants/districts";
+import { crops } from "@/constants/crops";
 
-const formSchema = z.object({
-  district: z.enum(["Angul", "Balasore", "Bolangir"], {
+export const formSchema = z.object({
+  district: z.enum(districts, {
     error: "District is required",
   }),
-  crop: z.enum(["Paddy", "Wheat", "Maize", "Pulses", "Oilseeds"], {
+  crop: z.enum(crops, {
     error: "Crop is required",
   }),
   sow_date: z.date({ error: "Invalid date format" }),
@@ -45,22 +45,11 @@ const formSchema = z.object({
   }),
 });
 
-export default function CropPredictionForm() {
-  const [formData, setFormData] = useState({
-    district: "",
-    cropType: "",
-    sowingDate: "",
-    season: "",
-  });
+interface CropPredictionFormProps {
+  onSubmit: (data: z.infer<typeof formSchema>) => void
+}
 
-  const [results, setResults] = useState<null | {
-    predictedYield: string;
-    irrigation: string;
-    fertilizer: string;
-    pestAlert: string;
-  }>(null);
-
-  const [username, setUsername] = useState<string | null>(null);
+export default function CropPredictionForm({ onSubmit }: CropPredictionFormProps) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,11 +57,6 @@ export default function CropPredictionForm() {
   });
 
   useEffect(() => {
-    const storedName = localStorage.getItem("username");
-    if (!storedName) router.push("/Login-Form");
-    else setUsername(storedName);
-
-    // Snake cursor
     const snakeContainer = document.getElementById("snake-container");
     const dots: { el: HTMLDivElement; x: number; y: number }[] = [];
     const dotCount = 15;
@@ -112,55 +96,9 @@ export default function CropPredictionForm() {
     animateSnake();
   }, [router]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    onSubmit(data)
   };
-
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    // e.preventDefault();
-    if (!username) {
-      alert("Please login first!");
-      router.push("/Login-Form");
-      return;
-    }
-
-    const sampleData = {
-      predictedYield: "3.5 tons/hectare",
-      irrigation: "Water daily in the morning",
-      fertilizer: "Apply NPK 20-20-20 once a week",
-      pestAlert: "No major pests detected",
-    };
-
-    const formatedDate = format(data.sow_date,"yyyy-MM-dd");
-
-    axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/predict`,{
-      district: data.district,
-      crop: data.crop,
-      season: data.season,
-      sowing_date: formatedDate
-    }).then((resp) => {
-      console.log(resp.data);
-    }).catch((err) => {
-      if(err.response) {
-        // console.log(err.response.data.detail);
-        toast.error(err.response.data.detail, {
-          position: "bottom-center"
-        });
-      }
-      else {
-        toast.error(err.message);
-      }
-    });
-    setResults(sampleData);
-
-    // await new Promise((r) => setTimeout(r, 1000));
-    // const newData = {...data, sow_date: formatedDate}
-  };
-
-  if (!username) return null;
 
   return (
     <div className={styles.pageContainer}>
@@ -168,12 +106,12 @@ export default function CropPredictionForm() {
 
       <div className={styles.formContainer}>
         <h2 className={styles.formHeading}>
-          👋 Welcome, {username}! Predict your crop yield.
+          👋 Welcome! Predict your crop yield.
         </h2>
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className={styles.formGrid}
           >
             <FormField
@@ -194,9 +132,9 @@ export default function CropPredictionForm() {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Districts</SelectLabel>
-                        <SelectItem value="Angul">Angul</SelectItem>
-                        <SelectItem value="Bolangir">Bolangir</SelectItem>
-                        <SelectItem value="Balasore">Balasore</SelectItem>
+                        {districts.map((_,i) => (
+                          <SelectItem value={_} key={i}>{_.toLowerCase()}</SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -221,12 +159,10 @@ export default function CropPredictionForm() {
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Districts</SelectLabel>
-                        <SelectItem value="Wheat">Wheat</SelectItem>
-                        <SelectItem value="Paddy">Paddy</SelectItem>
-                        <SelectItem value="Maize">Maize</SelectItem>
-                        <SelectItem value="Pulses">Pulses</SelectItem>
-                        <SelectItem value="Oilseeds">Oilseeds</SelectItem>
+                        <SelectLabel>Crops</SelectLabel>
+                        {crops.map((_,i) => (
+                          <SelectItem value={_} key={i}>{_}</SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -246,7 +182,7 @@ export default function CropPredictionForm() {
                   >
                     <FormControl>
                       <SelectTrigger className="w-full py-6 rounded-3xl ring-green-300">
-                        <SelectValue placeholder="Select a district" />
+                        <SelectValue placeholder="Select a season" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -292,9 +228,6 @@ export default function CropPredictionForm() {
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
                         captionLayout="dropdown"
                       />
                     </PopoverContent>
@@ -310,30 +243,6 @@ export default function CropPredictionForm() {
           </div>
           </form>
         </Form>
-
-        {results && (
-          <div className={styles.resultsContainer}>
-            <h3 className={styles.resultsHeading}>🌟 Prediction Results</h3>
-            <div className={styles.resultsGrid}>
-              <div className={styles.resultItem}>
-                <p className={styles.resultLabel}>Predicted Yield</p>
-                <p className={styles.resultValue}>{results.predictedYield}</p>
-              </div>
-              <div className={styles.resultItem}>
-                <p className={styles.resultLabel}>Irrigation</p>
-                <p className={styles.resultValue}>{results.irrigation}</p>
-              </div>
-              <div className={styles.resultItem}>
-                <p className={styles.resultLabel}>Fertilizer</p>
-                <p className={styles.resultValue}>{results.fertilizer}</p>
-              </div>
-              <div className={styles.resultItem}>
-                <p className={styles.resultLabel}>Pest Alert</p>
-                <p className={styles.resultValue}>{results.pestAlert}</p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
