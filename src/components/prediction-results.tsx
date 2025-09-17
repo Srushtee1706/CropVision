@@ -270,7 +270,7 @@ export function PredictionResults({
                   <span className="text-sm font-medium">Temperature</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {data.predicted_environmental_conditions.season_avg_temp_c}
+                  {data.predicted_environmental_conditions.season_avg_temp_c} C
                 </p>
               </div>
 
@@ -283,7 +283,7 @@ export function PredictionResults({
                   {
                     data.predicted_environmental_conditions
                       .season_total_rainfall_mm
-                  }
+                  } mm
                 </p>
               </div>
 
@@ -293,7 +293,7 @@ export function PredictionResults({
                   <span className="text-sm font-medium">Humidity</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {data.predicted_environmental_conditions.season_avg_humidity}
+                  {data.predicted_environmental_conditions.season_avg_humidity} %
                 </p>
               </div>
             </div>
