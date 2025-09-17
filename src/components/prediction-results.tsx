@@ -17,6 +17,7 @@ import {
   CloudRain,
   Leaf,
   BarChart3,
+  RefreshCcw,
 } from "lucide-react";
 import { CropFormData, PredictionData2 } from "@/app/crop-prediction/page";
 import { downloadBlob } from "@/lib/downloadPdf";
@@ -28,12 +29,14 @@ interface PredictionResultsProps {
   data: PredictionData2;
   formData: CropFormData;
   pdfString: string;
+  onStartOver: () => void
 }
 
 export function PredictionResults({
   data,
   formData,
   pdfString,
+  onStartOver
 }: PredictionResultsProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -92,6 +95,11 @@ export function PredictionResults({
           Based on your {formData.crop} cultivation in {formData.district}{" "}
           district
         </p>
+        <div>
+          <Button onClick={onStartOver} size={"lg"} variant={"outline"} className="text-black">
+            <RefreshCcw /> Re-predict
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
