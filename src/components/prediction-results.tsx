@@ -217,7 +217,7 @@ export function PredictionResults({
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Phosphorus (P)</span>
                   <span className="text-sm font-bold">
-                    {data.predicted_fertilizer_recommendation.P} kg/acre
+                    {data.predicted_fertilizer_recommendation.P} kg/ha
                   </span>
                 </div>
                 <Progress
@@ -232,7 +232,7 @@ export function PredictionResults({
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Potassium (K)</span>
                   <span className="text-sm font-bold">
-                    {data.predicted_fertilizer_recommendation.K} kg/acre
+                    {data.predicted_fertilizer_recommendation.K} kg/ha
                   </span>
                 </div>
                 <Progress
@@ -256,10 +256,10 @@ export function PredictionResults({
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sun className="h-5 w-5 text-primary" />
-              Optimal Environmental Conditions
+              Predicted Environmental Conditions
             </CardTitle>
             <CardDescription>
-              Ideal growing conditions for maximum yield
+              Predicted environmental conditions during harvest/season
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -267,7 +267,7 @@ export function PredictionResults({
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Thermometer className="h-4 w-4 text-orange-500" />
-                  <span className="text-sm font-medium">Temperature</span>
+                  <span className="text-sm font-medium">Temperature (Season Avg.)</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {data.predicted_environmental_conditions.season_avg_temp_c} C
@@ -277,7 +277,7 @@ export function PredictionResults({
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <CloudRain className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm font-medium">Rainfall</span>
+                  <span className="text-sm font-medium">Rainfall (Season total)</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {
@@ -290,7 +290,7 @@ export function PredictionResults({
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Droplets className="h-4 w-4 text-cyan-500" />
-                  <span className="text-sm font-medium">Humidity</span>
+                  <span className="text-sm font-medium">Humidity (Season Avg.)</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {data.predicted_environmental_conditions.season_avg_humidity} %
